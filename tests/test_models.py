@@ -101,6 +101,20 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(new_product.available, product.available)
         self.assertEqual(new_product.category, product.category)
 
-    #
-    # ADD YOUR TEST CASES HERE
-    #
+    def test_read_aproduct(self):
+        """It should Read a product from the database"""
+        product = ProductFactory()
+        product.id = None
+        product.create()
+        self.assertIsNotNone(product.id)
+        # Fetch the product back
+        foundProduct = Product.find(product.id)
+        self.assertEqual(foundProduct.id, product.id)
+        self.assertEqual(foundProduct.name, product.name)
+        self.assertEqual(foundProduct.description, product.description)
+        self.assertEqual(foundProduct.price, product.price)
+
+    def test_update_a_product(self):
+        """It should Update a product and add it to the database"
+
+    
