@@ -42,6 +42,7 @@ class ProductFactory(factory.Factory):
             "Banana",
             "Orange",
             "Pineapple",
+            "Ham",
             "Pots",
             "Pans",
             "Hangers",
@@ -49,7 +50,8 @@ class ProductFactory(factory.Factory):
             "Ford",
             "Jaguar",
             "Wrench",
-            "Spanner"
+            "Spanner",
+            "Pliers"
             ]
         )
     description = factory.Faker("text")
