@@ -172,9 +172,10 @@ class TestProductModel(unittest.TestCase):
 
     def test_find_product_by_category(self):
         """It should find a Product by category"""
-        products = ProductFactory.create_batch(5)
+        products = ProductFactory.create_batch(10)
         for product in products:
             product.create()
+            
         category = products[3].category
         count = len([product for product in product if product.category == categroy])
         found = Product.find_by_category(category)
