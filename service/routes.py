@@ -100,7 +100,7 @@ def create_products():
 @app.route("/products", methods=["GET"])
 def get_all_products():
     products = Product.all()
-    if not products
+    if not products:
         abort(status.HTTP_404_NOT_FOUND, f"Empty Result")
     
     return products.serialize(), status.HTTP_200_OK
