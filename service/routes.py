@@ -119,7 +119,7 @@ def get_products(product_id):
 ######################################################################
 # U P D A T E   A   P R O D U C T
 ######################################################################
-@app.route("/products/<int:product_id>", methods=["PATCH"])
+@app.route("/products/<int:product_id>", methods=["PUT"])
 def update_products(product_id):
     check_content_type("application/json")
     product = Product.find(product_id)
@@ -143,4 +143,4 @@ def delete_products(product_id):
         abort(status.HTTP_404_NOT_FOUND, f"Product with id '{product_id}' was not found.")
 
     product.delete()
-    return jsonify(f"Product '{product_id}' deleted") status.HTTP_200_OK
+    return "", status.HTTP_204_NO_CONTENT
