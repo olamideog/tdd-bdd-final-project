@@ -124,8 +124,11 @@ def get_products(product_id):
 ######################################################################
 # D E L E T E   A   P R O D U C T
 ######################################################################
+@app.route("/products/<int:product_id>", methods=["DELETE"])
+def delete_products(product_id):
+    product = Product.find(product_id)
+    if not product:
+        abort(status.HTTP_404_NOT_FOUND, f"Product with id '{product_id}' was not found.")
 
-
-#
-# PLACE YOUR CODE TO DELETE A PRODUCT HERE
-#
+    product.delete()
+    return jsonify(f"Product '{product_id}' deleted") status.HTTP_200_OK
