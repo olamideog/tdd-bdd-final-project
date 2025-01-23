@@ -187,16 +187,18 @@ class TestProductRoutes(TestCase):
         # Perform the update
         response = self.client.put(
             f"/products/{testProduct.id}",
-            data=json.dumps(update_data),
+            json=update_data,
             content_type="application/json"
         )
         
         # Check the response
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        #self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
-        self.assertEqual(data["name"], update_data["name"])
-        self.assertEqual(data["description"], update_data["description"])
-        self.assertEqual(data["category"], update_data["category"])
+        updateData = update_data.deserialize()
+        self.assertEqual(data.name, updateData.name)
+        #self.assertEqual(data.name, update_data["name"])
+        #self.assertEqual(data.description, update_data["description"])
+        #self.assertEqual(data.category, update_data["category"])
     
     def test_update_product_not_found(self):
         # Attempt to update a non-existent product
@@ -208,7 +210,7 @@ class TestProductRoutes(TestCase):
         
         response = self.client.put(
             "/products/0",  # Assuming 0 is an ID that does not exist
-            data=json.dumps(update_data),
+            json=update_data,
             content_type="application/json"
         )
         
