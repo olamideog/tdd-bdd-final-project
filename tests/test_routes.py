@@ -49,7 +49,7 @@ BASE_URL = "/products"
 ######################################################################
 # pylint: disable=too-many-public-methods
 class TestProductRoutes(TestCase):
-    """Product Service tests"""
+    """Route Product Service Tests"""
 
     @classmethod
     def setUpClass(cls):
@@ -178,25 +178,26 @@ class TestProductRoutes(TestCase):
         """It should Update a single product sucessfully"""
         testProduct = self._create_products(1)[0]
         # New data for the update
-        update_data = {
+        payload = {
             "name": "Updated Product Name",
             "description": "Updated description",
             "category": "Updated Category"
         }
         
         # Perform the update
-        response = self.client.put(
-            f"/products/{testProduct.id}",
-            json=update_data,
+        response = self.client.put(f"{BASE_URL}/{testProduct.id}",
+            json=payload,
             content_type="application/json"
         )
         
         # Check the response
-        #self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
-        updateData = update_data.deserialize()
-        self.assertEqual(data.name, updateData.name)
-        #self.assertEqual(data.name, update_data["name"])
+
+        #name = data["name"]
+        name = payload["name"]
+       
+        #self.assertEqual(data.name, payload["name"])
         #self.assertEqual(data.description, update_data["description"])
         #self.assertEqual(data.category, update_data["category"])
     
