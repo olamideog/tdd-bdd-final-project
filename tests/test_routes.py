@@ -28,6 +28,7 @@ import os
 import logging
 from decimal import Decimal
 from unittest import TestCase
+from flask import json
 from service import app
 from service.common import status
 from service.models import db, init_db, Product
@@ -186,7 +187,7 @@ class TestProductRoutes(TestCase):
         
         # Perform the update
         response = self.client.put(f"{BASE_URL}/{testProduct.id}",
-            json=payload,
+            data=json.dumps(payload),
             content_type="application/json"
         )
         
