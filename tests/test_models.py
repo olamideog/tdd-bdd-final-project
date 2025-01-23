@@ -147,7 +147,7 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(len(products), 0)
 
     def test_list_all_products(self):
-        """It should lisy all Products in the database"""
+        """It should list all Products in the database"""
         products = Product.all()
         self.assertEqual(len(products), 0)
         

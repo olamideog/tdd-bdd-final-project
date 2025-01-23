@@ -166,13 +166,21 @@ class TestProductRoutes(TestCase):
     #
     # ADD YOUR TEST CASES HERE
     #
-    def test_get_product(self):
+    def test_get_a_product(self):
         """It should Get a single product"""
         testProduct = self._create_products(1)[0]
         response = self.client.get(f"{BASE_URL}/{testProduct.id}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
         self.assertEqual(data["name"], testProduct.name)
+    
+    def test_get_all_products(self):
+        """It should Get all product"""
+        testProducts = self._create_products(5)
+        response = self.client.get(f"{BASE_URL}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(len(data), len(testProducts))
 
     def test_get_product_not_found(self):
         """It should not Get a Product thats not found"""
