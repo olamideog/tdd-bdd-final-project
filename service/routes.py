@@ -103,7 +103,9 @@ def get_all_products():
     if not products:
         abort(status.HTTP_404_NOT_FOUND, f"Empty Result")
     
-    return products.serialize(), status.HTTP_200_OK
+    serialized_products = [product.serialize() for product in products]
+    
+    return serialized_products, status.HTTP_200_OK
 
 ######################################################################
 # R E A D   A   P R O D U C T
