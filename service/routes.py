@@ -125,12 +125,12 @@ def get_products(product_id):
 def update_products(product_id):
     check_content_type("application/json")
     product = Product.find(product_id)
+    
     if not product:
         abort(status.HTTP_404_NOT_FOUND, f"Product with id '{product_id}' was not found.")
 
-    data = request.get_json()
-    app.logger.info("Processing: %s", data)
-    product.deserialize(data)
+    
+    product.deserialize(request.get_json())
     product.update()
     return product.serialize(), status.HTTP_200_OK
 

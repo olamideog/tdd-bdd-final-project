@@ -175,34 +175,19 @@ class TestProductRoutes(TestCase):
         data = response.get_json()
         self.assertEqual(data["name"], testProduct.name)
 
-    def test_update_a_product(self):
-        """It should Update a single product sucessfully"""
-        testProduct = self._create_products(1)[0]
-        # New data for the update
-        payload = {
-            "name": "Updated Product Name",
-            "description": "Updated description",
-            "category": "Updated Category"
-        }
-        
-        # Perform the update
-        response = self.client.put(f"{BASE_URL}/{testProduct.id}",
-            data=json.dumps(payload),
-            content_type="application/json"
-        )
-        
-        # Check the response
+    def test_update_product(self):
+        """It should Update an existing Product"""
+        # create a product to update
+        test_product = ProductFactory()
+        response = self.client.post(BASE_URL, json=test_product.serialize())
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        # update the product
+        new_product = response.get_json()
+        new_product["description"] = "unknown"
+        response = self.client.put(f"{BASE_URL}/{new_product['id']}", json=new_product)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        data = response.get_json()
-
-        #name = data["name"]
-        name = payload["name"]
-       
-        #self.assertEqual(data.name, payload["name"])
-        #self.assertEqual(data.description, update_data["description"])
-        #self.assertEqual(data.category, update_data["category"])
-    
-    def test_update_product_not_found(self):
+        updated_product = response.get_json()
+        self.assertEqual(updated_product["description"], "unknown")
         # Attempt to update a non-existent product
         update_data = {
             "name": "Non-existent Product",
@@ -235,6 +220,20 @@ class TestProductRoutes(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         data = response.get_json()
         self.assertIn("was not found", data["message"])
+    
+    def test_delete_product(self):
+        """It should Delete a Product"""
+        products = self._create_products(5)
+        product_count = self.get_product_count()
+        test_product = products[0]
+        response = self.client.delete(f"{BASE_URL}/{test_product.id}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(len(response.data), 0)
+        # make sure they are deleted
+        response = self.client.get(f"{BASE_URL}/{test_product.id}")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        new_count = self.get_product_count()
+        self.assertEqual(new_count, product_count - 1)
 
     ######################################################################
     # Utility functions
