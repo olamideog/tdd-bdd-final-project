@@ -182,3 +182,17 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(found.count(), count)
         for product in found:
             self.assertEqual(product.category, category)
+
+    def test_update_a_product_with_empty_id(self):
+        """It should throw an error when trying to Update a product in the database"""
+        product = ProductFactory()
+        product.id = None
+        product.create()
+        self.assertIsNotNone(product.id)
+        product.name = "Blouse"
+        product.description = "This is a fancy top for a skirt"
+        product.category = Category.CLOTHS
+        originalId = product.id
+        product.id = None
+        updateResult = product.update()
+        self.assertEqual()
