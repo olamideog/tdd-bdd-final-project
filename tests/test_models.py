@@ -184,7 +184,7 @@ class TestProductModel(unittest.TestCase):
             self.assertEqual(product.category, category)
 
     def test_update_a_product_with_empty_id(self):
-        """It should throw an error when trying to Update a product in the database"""
+        """It should raise an error when trying to Update a product in the database with empty Id"""
         product = ProductFactory()
         product.id = None
         product.create()
@@ -194,5 +194,6 @@ class TestProductModel(unittest.TestCase):
         product.category = Category.CLOTHS
         originalId = product.id
         product.id = None
-        updateResult = product.update()
-        self.assertEqual()
+
+        with self.assertRaises(DataValidationError)
+            product.update()
