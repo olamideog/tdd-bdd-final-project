@@ -28,6 +28,7 @@ import logging
 import unittest
 from decimal import Decimal
 from service.models import Product, Category, db
+from service.models import DataValidationError
 from service import app
 from tests.factories import ProductFactory
 
@@ -183,6 +184,32 @@ class TestProductModel(unittest.TestCase):
         for product in found:
             self.assertEqual(product.category, category)
 
+    def test_find_product_by_price(self):
+        """It should find a Product by price"""
+        products = ProductFactory.create_batch(10)
+        for product in products:
+            product.create()
+
+        price = products[6].price
+        count = len([product for product in products if product.price == price])
+        found = Product.find_by_price(price)
+        self.assertEqual(found.count(), count)
+        for product in found:
+            self.assertEqual(product.price, price)
+    
+    def test_find_product_by_availability(self):
+        """It should find a Product by price"""
+        products = ProductFactory.create_batch(10)
+        for product in products:
+            product.create()
+
+        available = True
+        count = len([product for product in products if product.available == available])
+        found = Product.find_by_availability(available)
+        self.assertEqual(found.count(), count)
+        for product in found:
+            self.assertEqual(product.available, available)
+
     def test_update_a_product_with_empty_id(self):
         """It should raise an error when trying to Update a product in the database with empty Id"""
         product = ProductFactory()
@@ -192,8 +219,7 @@ class TestProductModel(unittest.TestCase):
         product.name = "Blouse"
         product.description = "This is a fancy top for a skirt"
         product.category = Category.CLOTHS
-        originalId = product.id
         product.id = None
 
-        with self.assertRaises(DataValidationError)
+        with self.assertRaises(DataValidationError):
             product.update()
